@@ -19,6 +19,6 @@ export default {
     bottom: 0;
     background: #f7f7f7;
     overflow: auto;
-    padding: 20px;
+    padding: 20px 32px 20px 20px;
   }
 </style>

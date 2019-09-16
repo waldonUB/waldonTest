@@ -47,7 +47,7 @@ export default {
     ul {
       list-style: none;
       margin: 0;
-      padding: 0;
+      padding: 20px 0;
       li {
         height: 60px;
         line-height: 60px;
