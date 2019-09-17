@@ -30,7 +30,10 @@
           <li class="tab-pane tabs-slider" :style="{width: tagWidth, left: tagLeftPoint}"></li>
         </ul>
         <div class="select-box">
-          <input type="text" class="select-option">
+          <yx-select :current.sync="condition.sName"
+                     :options="sList"
+                     select-width="120px">
+          </yx-select>
           <input type="text" class="small-input" placeholder="联系人">
           <input type="text" class="middle-input" placeholder="联系手机">
           <input type="text" class="middle-input" placeholder="联系QQ">
@@ -44,6 +47,7 @@
         <yx-table :table-th-list="tableThList"
           :table-list="tableList">
         </yx-table>
+        <yx-pagination :pageParams="pageParams"></yx-pagination>
       </section>
     </content-panel>
   </div>
@@ -54,11 +58,24 @@ import ContentHeader from '@components/common/contentHeader/ContentHeader'
 import BtnSuccess from '@components/common/btn/BtnSuccess'
 import ContentPanel from '@components/common/contentPanel/ContentPanel'
 import YxTable from '@components/common/table/YxTable'
+import YxPagination from '@components/common/pagination/YxPagination'
+import YxSelect from '@components/common/input/YxSelect'
 export default {
   name: 'CustomerList',
-  components: {ContentHeader, BtnSuccess, ContentPanel, YxTable},
+  components: {ContentHeader, BtnSuccess, ContentPanel, YxTable, YxPagination, YxSelect},
   data () {
     return {
+      // 搜索条件区域
+      condition: {
+        sName: '' // 业务人员
+      },
+      // 分页信息
+      pageParams: {
+        total: 1, // 条数，后面会从后端获取
+        current: 1,
+        size: 10,
+        pages: 1 // 页数，后面会从后端获取
+      },
       currentType: 'followBase',
       currentTag: 'all',
       customerTypeList: [{
@@ -142,7 +159,17 @@ export default {
           sourceName: '客户介绍',
           visitsTimeName: ''
         }
-      ] // 表格数据
+      ], // 表格数据
+      sList: [
+        {
+          code: '01',
+          label: '全部业务员'
+        },
+        {
+          code: '02',
+          label: '小叮当'
+        }
+      ]
     }
   },
   methods: {
@@ -168,7 +195,22 @@ export default {
       } else {
         this.tagWidth = '28px'
       }
+    },
+    /**
+     * 获取客户列表
+     * */
+    getTsClientList () {
+      const vm = this
+      vm.$http.post('/client/tsClient_h.jsp?cmd=getTsClientList', {}).then(res => {
+        console.log(res)
+      }).catch(res => {
+        console.warn(res)
+      })
     }
+  },
+  created () {
+    this.condition.sName = this.sList[0].label
+    this.getTsClientList()
   }
 }
 </script>
@@ -269,9 +311,6 @@ export default {
         }
         &::placeholder {
           color: rgba(196, 196, 204, 1);
-        }
-        &.select-option {
-          width: 120px;
         }
         &.small-input {
           width: 120px;

@@ -16,7 +16,15 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
-    port: 9000
+    port: 9000,
+    proxy: {
+      '/api': {
+        target: 'http://st.ppp.top/ajax/', // 代理服务器路径
+        pathRewrite: {
+          '^/api': '/' // 重写路径
+        }
+      }
+    },
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
