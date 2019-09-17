@@ -41,6 +41,9 @@
             <span>搜索</span>
           </btn-success>
         </div>
+        <yx-table :table-th-list="tableThList"
+          :table-list="tableList">
+        </yx-table>
       </section>
     </content-panel>
   </div>
@@ -50,9 +53,10 @@
 import ContentHeader from '@components/common/contentHeader/ContentHeader'
 import BtnSuccess from '@components/common/btn/BtnSuccess'
 import ContentPanel from '@components/common/contentPanel/ContentPanel'
+import YxTable from '@components/common/table/YxTable'
 export default {
   name: 'CustomerList',
-  components: {ContentHeader, BtnSuccess, ContentPanel},
+  components: {ContentHeader, BtnSuccess, ContentPanel, YxTable},
   data () {
     return {
       currentType: 'followBase',
@@ -76,7 +80,69 @@ export default {
       }],
       baseLeftPoint: 0, // 库：初始化下标为0
       tagLeftPoint: 0, // 标签：初始化下标为0
-      tagWidth: '28px'
+      tagWidth: '28px',
+      tableThList: [ // 表头数据
+        {
+          prop: 'contacts',
+          label: '联系人',
+          width: '120'
+        },
+        {
+          prop: 'mobile',
+          label: '联系手机',
+          width: '150'
+        },
+        {
+          prop: 'qq',
+          label: '联系QQ',
+          width: '150'
+        },
+        {
+          prop: 'sourceName',
+          label: '客户来源',
+          width: '150'
+        },
+        {
+          prop: 'sid',
+          label: '业务员',
+          width: '120'
+        },
+        {
+          prop: 'visitsTimeName',
+          label: '下次回访时间',
+          width: '300'
+        },
+        {
+          prop: 'status',
+          label: '关联情况',
+          width: '150'
+        },
+        {
+          prop: 'labelId',
+          label: '标签',
+          width: '200'
+        },
+        {
+          prop: 'operate',
+          label: '操作',
+          width: '300'
+        }
+      ],
+      tableList: [
+        {
+          id: 1,
+          contacts: '小叮当',
+          mobile: '18799821312',
+          qq: '1234567',
+          source: 2,
+          status: 1,
+          labelId: 1,
+          sid: 0,
+          createTime: 1568268286000,
+          sourceName: '客户介绍',
+          visitsTimeName: ''
+        }
+      ] // 表格数据
     }
   },
   methods: {

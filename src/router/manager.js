@@ -8,7 +8,7 @@ Vue.use(Router)
 export default [
   {
     path: '',
-    component: CustomerList
+    redirect: 'customerList'
   },
   {
     path: 'customerList',
