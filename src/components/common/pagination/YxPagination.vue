@@ -2,7 +2,7 @@
   <div class="pagination-wrapper">
     <div class="left-part">
       <span>共有{{pageParams.total}}条记录，每页显示</span>
-      <yx-select :current.sync="pageParams.size"
+      <yx-select :current.sync="pageParams.limit"
                  :options="pageSize"
                  select-width="70px">
       </yx-select>
@@ -13,7 +13,7 @@
           <use xlink:href="#icon-icon-13"></use>
         </svg>
       </btn-default>
-      <span class="page-info">{{pageParams.current}} / {{pageParams.number}}</span>
+      <span class="page-info">{{pageParams.pageNow}} / {{pages}}</span>
       <btn-default>
         <svg class="icon-only" aria-hidden="true">
           <use xlink:href="#icon-icon-14"></use>
@@ -39,10 +39,9 @@ export default {
       required: true,
       default: () => {
         return {
-          total: 1, // 条数，后面会从后端获取
-          current: 1,
-          size: 10,
-          number: 1 // 页数，后面会从后端获取
+          total: 1, // 条数
+          pageNow: 1,
+          limit: 10
         }
       }
     }
@@ -66,9 +65,21 @@ export default {
       ]
     }
   },
+  computed: {
+    /**
+     * 计算总页数，当总条数或者limit改变时重新计算
+     * */
+    pages () {
+      if (this.pageParams.total % this.pageParams.limit === 0) {
+        return this.pageParams.total / this.pageParams.limit
+      } else {
+        return Math.floor((this.pageParams.total / this.pageParams.limit)) + 1
+      }
+    }
+  },
   methods: {
     gotoIndex () {
-      this.pageParams.current = this.pageIndex
+      this.pageParams.pageNow = this.pageIndex
     }
   }
 }

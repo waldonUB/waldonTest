@@ -19,10 +19,15 @@ module.exports = {
     port: 9000,
     proxy: {
       '/api': {
-        target: 'http://st.ppp.top/ajax/', // 代理服务器路径
+        target: 'http://st.ppp.top/ajax', // 易销后端代理服务器路径
         pathRewrite: {
-          '^/api': '/' // 重写路径
-        }
+          '^/api': '' // 重写路径
+        },
+        changeOrigin: true
+        // target: 'http://localhost:8080', // 本地代理服务器路径
+        // pathRewrite: {
+        //   '^/api': '/gc' // 重写路径
+        // }
       }
     },
   },

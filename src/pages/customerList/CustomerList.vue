@@ -44,8 +44,25 @@
             <span>搜索</span>
           </btn-success>
         </div>
-        <yx-table :table-th-list="tableThList"
-          :table-list="tableList">
+        <yx-table :table-th-list="tableThList">
+          <tr v-for="item of tableList"
+              :key="item.id">
+            <td>{{item.contacts}}</td>
+            <td>{{item.mobile}}</td>
+            <td>{{item.qq}}</td>
+            <td>{{item.sourceName}}</td>
+            <td>{{item.sid}}</td>
+            <td>{{item.visitsTimeName}}</td>
+            <td>
+              <btn-normal>详细</btn-normal>
+            </td>
+            <td>{{item.labelId}}</td>
+            <td>
+              <btn-normal class="btn-normal-rt">回访记录</btn-normal>
+              <btn-normal class="btn-normal-rt">编辑</btn-normal>
+              <btn-normal>淘汰</btn-normal>
+            </td>
+          </tr>
         </yx-table>
         <yx-pagination :pageParams="pageParams"></yx-pagination>
       </section>
@@ -60,9 +77,10 @@ import ContentPanel from '@components/common/contentPanel/ContentPanel'
 import YxTable from '@components/common/table/YxTable'
 import YxPagination from '@components/common/pagination/YxPagination'
 import YxSelect from '@components/common/input/YxSelect'
+import BtnNormal from '@components/common/btn/BtnNormal'
 export default {
   name: 'CustomerList',
-  components: {ContentHeader, BtnSuccess, ContentPanel, YxTable, YxPagination, YxSelect},
+  components: {ContentHeader, BtnSuccess, BtnNormal, ContentPanel, YxTable, YxPagination, YxSelect},
   data () {
     return {
       // 搜索条件区域
@@ -71,10 +89,9 @@ export default {
       },
       // 分页信息
       pageParams: {
-        total: 1, // 条数，后面会从后端获取
-        current: 1,
-        size: 10,
-        pages: 1 // 页数，后面会从后端获取
+        total: 1, // 条数
+        pageNow: 1,
+        limit: 10
       },
       currentType: 'followBase',
       currentTag: 'all',
@@ -145,22 +162,8 @@ export default {
           width: '300'
         }
       ],
-      tableList: [
-        {
-          id: 1,
-          contacts: '小叮当',
-          mobile: '18799821312',
-          qq: '1234567',
-          source: 2,
-          status: 1,
-          labelId: 1,
-          sid: 0,
-          createTime: 1568268286000,
-          sourceName: '客户介绍',
-          visitsTimeName: ''
-        }
-      ], // 表格数据
-      sList: [
+      tableList: [], // 表格数据
+      sList: [ // 本地试用版暂无添加业务员权限，用着假数据先
         {
           code: '01',
           label: '全部业务员'
@@ -199,13 +202,16 @@ export default {
     /**
      * 获取客户列表
      * */
-    getTsClientList () {
-      const vm = this
-      vm.$http.post('/client/tsClient_h.jsp?cmd=getTsClientList', {}).then(res => {
-        console.log(res)
-      }).catch(res => {
-        console.warn(res)
-      })
+    async getTsClientList () {
+      let params = {
+        sid: -1
+      }
+      const res = await this.$yxPost('/client/tsClient_h.jsp?cmd=getTsClientList', params)
+      if (res.data && res.data.success) {
+        this.tableList = res.data.data
+        this.pageParams.total = res.data.total
+      } else {
+      }
     }
   },
   created () {
