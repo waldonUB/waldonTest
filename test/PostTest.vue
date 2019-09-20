@@ -16,7 +16,7 @@ export default {
       })
     },
     yxPostTest () {
-      document.cookie = '_FSESSIONID=nZp0Vvo010HBICB9'
+      // document.cookie = '_FSESSIONID=nZp0Vvo010HBICB9'
       const vm = this
       // vm.$http({
       //   method: 'post',
